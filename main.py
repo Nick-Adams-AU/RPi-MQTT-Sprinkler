@@ -40,10 +40,11 @@ def input_change(channel):
   # The RPi.GPIO library doesn't pass the detect edge to the callback. This
   # is less than ideal as we then need to re-check the input state which may
   # have changed since the event happend. RPi.GPIO bug 96.
+  state = "ON" if not GPIO.input(channel) else "OFF"
+  zone = list(inputZoneMap.keys())[list(inputZoneMap.values()).index(channel)]
+  print("Input " + str(zone) + ": " + state)
+  client.publish(inputRootTopic + "_input_" + zone + "/state", state)
 
-  state = "ON" if GPIO.input(channel) else "OFF"
-  print("Input " + str(inputZoneMap[channel]) + ": " + state)
-  client.publish(inputRootTopic + "_input_" + inputZone[channel] + "/state", state)
 
 def getMAC(interface='wlan0'):
   # Return the MAC address of the specified interface
