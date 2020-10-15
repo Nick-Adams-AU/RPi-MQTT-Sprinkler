@@ -110,6 +110,10 @@ def on_connect(client, userdata, flags, rc):
 
       client.publish(inputRootTopic + "_" + zone + "/config", json.dumps(configPayload))
 
+      # Publish initial state of input
+      state = "ON" if not GPIO.input(inputZoneMap[zone]) else "OFF"
+      client.publish(inputRootTopic + "_input_" + zone + "/state", state)
+
       print(zone, end =" ")
 
     print("")
